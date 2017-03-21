@@ -118,9 +118,9 @@ if __name__=="__main__":
                         help="Specify the indices of the search algorithms to use as a list of space separated values. Choose from: {!s}".format(list(range(1, len(SEARCHES)+1))))
     args = parser.parse_args()
     
-    # 
-    args.problems = [1]
-    args.searches = [1]
+    # override the problem and search method so that it doesn't prompt every time
+    args.problems = [3]
+    args.searches = [9]
 
     if args.manual:
         manual()

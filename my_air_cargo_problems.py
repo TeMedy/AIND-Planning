@@ -87,13 +87,13 @@ class AirCargoProblem(Problem):
                 for p in self.planes: 
                     for a in self.airports: 
                         precond_pos = [expr("At({}, {})".format(p, a)),
-                                       expr("In({}, {})".format(c, a)),
+                                       expr("In({}, {})".format(c, p)),
                                        ]
                         precond_neg = []
                         effect_add = [expr("At({}, {})".format(c, a))]
                         effect_rem = [expr("In({}, {})".format(c, p))]
                         
-                        unload = Action(expr("Load({}, {}, {})".format(c, p, a)),
+                        unload = Action(expr("Unload({}, {}, {})".format(c, p, a)),
                                     [precond_pos, precond_neg],
                                     [effect_add, effect_rem])
                         unloads.append(unload)
@@ -211,6 +211,11 @@ class AirCargoProblem(Problem):
         '''
         # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
         count = 0
+        kb = PropKB()
+        kb.tell(decode_state(node.state, self.state_map).pos_sentence())
+        for clause in self.goal:
+            if clause not in kb.clauses:
+                count += 1
         return count
 
 
@@ -283,7 +288,7 @@ def air_cargo_p2() -> AirCargoProblem:
 def air_cargo_p3() -> AirCargoProblem:
     cargos = ['C1', 'C2', 'C3', 'C4']
     planes = ['P1', 'P2']
-    airports = ['JFK', 'SFO', 'ATL']
+    airports = ['JFK', 'SFO', 'ATL', 'ORD']
     pos = [expr('At(C1, SFO)'),
            expr('At(C2, JFK)'),
            expr('At(C3, ATL)'),
@@ -291,16 +296,16 @@ def air_cargo_p3() -> AirCargoProblem:
            expr('At(P1, SFO)'),
            expr('At(P2, JFK)'),
            ]
-    neg = [expr('At(C2, SFO)'),
-           expr('At(C2, ATL)'),
-           expr('At(C2, ORD)'),
-           expr('In(C2, P1)'),
-           expr('In(C2, P2)'),
-           expr('At(C1, JFK)'),
+    neg = [expr('At(C1, JFK)'),
            expr('At(C1, ATL)'),
            expr('At(C1, ORD)'),
            expr('In(C1, P1)'),
            expr('In(C1, P2)'),
+           expr('At(C2, SFO)'),
+           expr('At(C2, ATL)'),
+           expr('At(C2, ORD)'),
+           expr('In(C2, P1)'),
+           expr('In(C2, P2)'),
            expr('At(C3, JFK)'),
            expr('At(C3, SFO)'),
            expr('At(C3, ORD)'),
