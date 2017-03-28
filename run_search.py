@@ -119,8 +119,8 @@ if __name__=="__main__":
     args = parser.parse_args()
     
     # override the problem and search method so that it doesn't prompt every time
-    args.problems = [3]
-    args.searches = [9]
+    args.problems = [1]
+    args.searches = [10]
 
     if args.manual:
         manual()
