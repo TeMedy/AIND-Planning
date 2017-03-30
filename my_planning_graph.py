@@ -2,7 +2,6 @@ from aimacode.planning import Action
 from aimacode.search import Problem
 from aimacode.utils import expr
 from lp_utils import decode_state
-from _ctypes import ArgumentError
 
 
 class PgNode():
@@ -353,7 +352,7 @@ class PlanningGraph():
         #   parent sets of the S nodes
         self.s_levels.append(set())
         if level < 1: 
-            raise ArgumentError("Invalid level.")
+            raise Exception("Invalid level.")
         for a_node in self.a_levels[level - 1]: 
             for literal in (set(a_node.action.effect_add) | set(a_node.action.effect_rem)): 
                 if literal in a_node.action.effect_add: 
